@@ -1,0 +1,11 @@
+.head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding-top: 60px;
+}
