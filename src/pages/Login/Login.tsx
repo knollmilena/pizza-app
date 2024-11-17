@@ -6,7 +6,7 @@ import styles from './Login.module.css';
 import { FormEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
-import { login, userActions } from '../../store/user.clice';
+import { login, userActions } from '../../store/user.slice';
 
 export const Login = () => {
     const navigate = useNavigate();

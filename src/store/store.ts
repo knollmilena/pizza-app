@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userSlice, { JWT_KEY } from './user.clice';
+import userSlice, { JWT_KEY } from './user.slice';
 import { saveJwtState } from './storage';
+import basketSlice from './basket.slice';
 
 export const store = configureStore({
     reducer: {
         userSlice,
+        basketSlice,
     },
 });
 

@@ -7,13 +7,14 @@ import cartIcon from '@images/cart-icon.svg';
 import exitIcon from '@images/exit.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
-import { getProfile, userActions } from '../../store/user.clice';
+import { getProfile, userActions } from '../../store/user.slice';
 import { useEffect } from 'react';
 
 export const Layout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const profile = useSelector((s: RootState) => s.userSlice.profile);
+    const itemsInBasket = useSelector((s: RootState) => s.basketSlice.items);
 
     useEffect(() => {
         dispatch(getProfile());
@@ -55,7 +56,13 @@ export const Layout = () => {
                         }
                         to="/cart"
                     >
-                        <img src={cartIcon} alt="Basket icon" /> Корзина
+                        <img src={cartIcon} alt="Basket icon" /> Корзина{' '}
+                        <span className={styles['cart-count']}>
+                            {itemsInBasket.reduce(
+                                (acc, item) => (acc += item.count),
+                                0
+                            )}
+                        </span>
                     </NavLink>
                 </div>
                 <Button className={styles['exit']} onClick={logout}>
