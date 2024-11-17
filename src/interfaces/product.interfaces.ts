@@ -2,7 +2,7 @@ export interface ProductInterface {
     id: number;
     name: string;
     prices: number;
-    ingredients: string;
+    ingredients: string[];
     image: string;
     rating: number;
 }

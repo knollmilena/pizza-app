@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Heading from '../../components/Heading/Heading';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
 import Search from '../../components/Search/Search';
@@ -11,8 +11,9 @@ const Menu = () => {
     const [products, setProducts] = useState<ProductInterface[]>([]);
     // const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState('');
+    const [filter, setFilter] = useState<string>();
 
-    const getMenu = async () => {
+    const getMenu = async (name?: string) => {
         try {
             // setIsLoading(true);
             // await new Promise<void>((resolve) => {
@@ -21,7 +22,12 @@ const Menu = () => {
             //     }, 2000);
             // });
             const { data } = await axios.get<ProductInterface[]>(
-                `${PREFIX}products`
+                `${PREFIX}products`,
+                {
+                    params: {
+                        name,
+                    },
+                }
             );
             setProducts(data);
             // setIsLoading(false);
@@ -35,15 +41,21 @@ const Menu = () => {
             // setIsLoading(false);
         }
     };
+    const updateFilter = (e: ChangeEvent<HTMLInputElement>) => {
+        setFilter(e.target.value);
+    };
 
     useEffect(() => {
-        getMenu();
-    }, []);
+        getMenu(filter);
+    }, [filter]);
     return (
         <>
             <div className={styles['head']}>
                 <Heading>Меню</Heading>
-                <Search placeholder="Введите блюдо или состав" />
+                <Search
+                    placeholder="Введите блюдо или состав"
+                    onChange={updateFilter}
+                />
             </div>
             <div className={styles['products']}>
                 {error && <>{error}</>}
@@ -53,7 +65,7 @@ const Menu = () => {
                         key={p.id}
                         id={p.id}
                         title={p.name}
-                        description={JSON.stringify(p.ingredients)}
+                        description={p.ingredients.join(', ')}
                         raiting={p.rating}
                         price={p.prices}
                         image={p.image}
