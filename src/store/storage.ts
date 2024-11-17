@@ -1,13 +1,13 @@
-export function loadJwtState<T>(key: string): T | undefined {
+export function loadJwtState<T>(key: string): T | null {
     try {
         const jsonState = localStorage.getItem(key);
         if (!jsonState) {
-            return undefined;
+            return null;
         }
-        return JSON.parse(jsonState);
+        return JSON.parse(jsonState).jwt;
     } catch (e) {
         console.error(e);
-        return undefined;
+        return null;
     }
 }
 

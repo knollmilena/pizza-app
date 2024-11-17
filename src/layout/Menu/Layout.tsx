@@ -5,16 +5,21 @@ import avatarImg from '@images/avatar.svg';
 import menuIcon from '@images/menu-icon.svg';
 import cartIcon from '@images/cart-icon.svg';
 import exitIcon from '@images/exit.svg';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
-import { userActions } from '../../store/user.clice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
+import { getProfile, userActions } from '../../store/user.clice';
+import { useEffect } from 'react';
 
 export const Layout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
+    const profile = useSelector((s: RootState) => s.userSlice.profile);
+
+    useEffect(() => {
+        dispatch(getProfile());
+    }, []);
 
     const logout = () => {
-        // localStorage.removeItem('jwt');
         dispatch(userActions.logout());
         navigate('/auth/login');
     };
@@ -27,10 +32,8 @@ export const Layout = () => {
                         src={avatarImg}
                         alt="Avatar user"
                     />
-                    <div className={`${styles['name']}`}>Artur Pirozhkov</div>
-                    <div className={`${styles['email']}`}>
-                        artur-pirazhkov@mail.ru
-                    </div>
+                    <div className={`${styles['name']}`}>{profile?.name}</div>
+                    <div className={`${styles['email']}`}>{profile?.email}</div>
                 </div>
 
                 <div className={`${styles['menu']}`}>

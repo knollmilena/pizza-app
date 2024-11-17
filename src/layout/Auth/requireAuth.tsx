@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { RootState } from '../../store/store';
 
 export const RequireAuth = ({ children }: { children: ReactNode }) => {
-    const jwt = useSelector((s: RootState) => s.userClice.jwt);
+    const jwt = useSelector((s: RootState) => s.userSlice.jwt);
 
     if (!jwt) {
         return <Navigate to="/auth/login" replace />;

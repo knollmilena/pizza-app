@@ -3,69 +3,59 @@ import Button from '../../components/Button/Button';
 import Heading from '../../components/Heading/Heading';
 import Input from '../../components/Input/Input';
 import styles from './Login.module.css';
-import { FormEvent, useState } from 'react';
-import axios from 'axios';
-import { AuthInterface } from '../../interfaces/auth.interface';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
-import { userActions } from '../../store/user.clice';
+import { FormEvent, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
+import { login, userActions } from '../../store/user.clice';
 
 export const Login = () => {
-    const [error, setError] = useState<string | null>();
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
+    const { jwt, loginErrorMessage } = useSelector(
+        (s: RootState) => s.userSlice
+    );
+
+    useEffect(() => {
+        if (jwt) {
+            navigate('/');
+        }
+    }, [jwt, navigate]);
 
     const onSubmit = (e: FormEvent) => {
         e.preventDefault();
-        setError(null);
-
+        dispatch(userActions.clearLoginError());
         const formData = new FormData(e.target as HTMLFormElement);
         const email = formData.get('email') as string;
-        const name = formData.get('password') as string;
+        const password = formData.get('password') as string;
 
-        postLogin(email, name);
+        postLogin(email, password);
     };
 
     const postLogin = async (email: string, password: string) => {
-        console.log(email, password);
-
-        try {
-            const { data } = await axios.post<AuthInterface>(
-                `https://purpleschool.ru/pizza-api-demo/auth/login`,
-                {
-                    email,
-                    password,
-                }
-            );
-            dispatch(userActions.addJwt(data.access_token));
-            // localStorage.setItem('jwt', data.access_token);
-            navigate('/');
-        } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message);
-            }
-        }
+        dispatch(login({ email, password }));
     };
 
     return (
         <div className={styles['login']}>
             <Heading>Вход</Heading>
-            {error && <div className={styles['error']}>{error}</div>}
+            {loginErrorMessage && (
+                <div className={styles['error']}>{loginErrorMessage}</div>
+            )}
             <form className={styles['login']} onSubmit={onSubmit}>
                 <div className={styles['field']}>
-                    <label htmlFor="email">Yout email</label>
+                    <label htmlFor="email">Ваш email</label>
                     <Input id="email" name="email" placeholder="Email" />
                 </div>
                 <div className={styles['field']}>
-                    <label htmlFor="password">Yout password</label>
+                    <label htmlFor="password">Ваш пароль</label>
                     <Input
                         id="password"
                         type="password"
                         name="password"
-                        placeholder="password"
+                        placeholder="Пароль"
                     />
                 </div>
-                <Button appearence="big">Login</Button>
+                <Button appearence="big">Вход</Button>
                 <div className={styles['links']}>
                     <div>Нет аккаунта?</div>
                     <Link to="/auth/register">Зарегистрироваться</Link>
