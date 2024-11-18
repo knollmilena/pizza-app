@@ -67,7 +67,7 @@ const Menu = () => {
                         title={p.name}
                         description={p.ingredients.join(', ')}
                         raiting={p.rating}
-                        price={p.prices}
+                        price={p.price}
                         image={p.image}
                     />
                 ))}

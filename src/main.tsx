@@ -2,7 +2,7 @@ import { lazy, StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Cart } from './pages/Cart/Cart.tsx';
+import { Basket } from './pages/Basket/Basket.tsx';
 import { Layout } from './layout/Menu/Layout.tsx';
 import { Product } from './pages/Product/Product.tsx';
 import { PREFIX } from './helpers/API.ts';
@@ -34,8 +34,8 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: 'Cart',
-                element: <Cart />,
+                path: 'Basket',
+                element: <Basket />,
             },
             {
                 path: '/product/:id',

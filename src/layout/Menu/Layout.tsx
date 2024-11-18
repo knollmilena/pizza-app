@@ -54,7 +54,7 @@ export const Layout = () => {
                                 styles['link']
                             }`
                         }
-                        to="/cart"
+                        to="/basket"
                     >
                         <img src={cartIcon} alt="Basket icon" /> Корзина{' '}
                         <span className={styles['cart-count']}>

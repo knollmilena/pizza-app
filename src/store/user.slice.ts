@@ -4,6 +4,7 @@ import { AuthInterface } from '../interfaces/auth.interface';
 import axios, { AxiosError } from 'axios';
 import { Profile } from '../interfaces/user.interfaces';
 import { RootState } from './store';
+import { PREFIX } from '../helpers/API';
 
 export const JWT_KEY = 'userData';
 
@@ -23,7 +24,7 @@ export const register = createAsyncThunk(
     async (params: { name: string; email: string; password: string }) => {
         try {
             const { data } = await axios.post<AuthInterface>(
-                `https://purpleschool.ru/pizza-api-demo/auth/register`,
+                `${PREFIX}auth/register`,
                 {
                     name: params.name,
                     email: params.email,
@@ -44,7 +45,7 @@ export const login = createAsyncThunk(
     async (params: { email: string; password: string }) => {
         try {
             const { data } = await axios.post<AuthInterface>(
-                `https://purpleschool.ru/pizza-api-demo/auth/login`,
+                `${PREFIX}auth/login`,
                 {
                     email: params.email,
                     password: params.password,
@@ -63,14 +64,11 @@ export const getProfile = createAsyncThunk<Profile, void, { state: RootState }>(
     'user/getProfile',
     async (_, thunkApi) => {
         const jwt = thunkApi.getState().userSlice.jwt;
-        const { data } = await axios.get<Profile>(
-            `https://purpleschool.ru/pizza-api-demo/user/profile`,
-            {
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                },
-            }
-        );
+        const { data } = await axios.get<Profile>(`${PREFIX}user/profile`, {
+            headers: {
+                Authorization: `Bearer ${jwt}`,
+            },
+        });
         return data;
     }
 );
